@@ -17,18 +17,29 @@ public class JpaMain {
         tx.begin();
 
         try {
-//            Member member = new Member();
-//            member.setId(1L);
-//            member.setName("손현호");
-//            em.persist(member);
-//
-//            Member member = em.find(Member.class, 1L);
-//            System.out.println("member.getId() = " + member.getId() + " member.getName() = " + member.getName());
-//            member.setName("손현호(modify)");
-//            em.remove(member);
+            // 저장
+            Team team = new Team();
+            team.setName("TeamA");
+            em.persist(team);
 
-            List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
-            members.forEach(member -> System.out.println("member = " + member.getName()));
+            Member memberA = new Member();
+            memberA.setUsername("손현호A");
+            memberA.changeTeam(team);
+            em.persist(memberA);
+
+            Member  memberB = new Member();
+            memberB.setUsername("손현호B");
+            memberB.changeTeam(team);
+            em.persist(memberB);
+
+            //조회
+            Member findMember = em.find(Member.class, memberA.getId());
+            List<Member> members = findMember.getTeam().getMembers();
+            for (Member member : members) {
+                System.out.println("member.getUsername() = " + member.getUsername());
+            }
+
+
             tx.commit();
         }catch (Exception e){
             tx.rollback();
