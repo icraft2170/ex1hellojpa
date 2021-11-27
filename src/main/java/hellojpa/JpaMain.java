@@ -1,11 +1,15 @@
 package hellojpa;
 
 
+import hellojpa.item.Item;
+import hellojpa.item.Movie;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.List;
+import java.util.Scanner;
 
 public class JpaMain {
 
@@ -17,28 +21,24 @@ public class JpaMain {
         tx.begin();
 
         try {
-            // 저장
-            Team team = new Team();
-            team.setName("TeamA");
-            em.persist(team);
+            Member member = new Member();
+            member.setUsername("Hello");
+            em.persist(member);
 
-            Member memberA = new Member();
-            memberA.setUsername("손현호A");
-            memberA.changeTeam(team);
-            em.persist(memberA);
+            em.flush();
+            em.clear();
 
-            Member  memberB = new Member();
-            memberB.setUsername("손현호B");
-            memberB.changeTeam(team);
-            em.persist(memberB);
+            Member findMember = em.find(Member.class, 1L);
 
-            //조회
-            Member findMember = em.find(Member.class, memberA.getId());
-            List<Member> members = findMember.getTeam().getMembers();
-            for (Member member : members) {
-                System.out.println("member.getUsername() = " + member.getUsername());
-            }
 
+            System.out.println(findMember.getTeam().getName());
+            System.out.println("findMember.getClass() = " + findMember.getClass());
+//            System.out.println("findMember.getUsername() = " + findMember.getUsername());
+//            System.out.println("findMember.getId() = " + findMember.getId());
+
+//            printMemberAndTeam(findMember);
+
+            Scanner scanner = new Scanner(System.in);
 
             tx.commit();
         }catch (Exception e){
@@ -48,4 +48,28 @@ public class JpaMain {
             emf.close();
         }
     }
+
+    private static void printMemberAndTeam(Member member) {
+        String username = member.getUsername();
+        System.out.println("username = " + username);
+
+        Team team = member.getTeam();
+        System.out.println("team.getName() = " + team.getName());
+    }
 }
+
+
+
+
+/**
+ * drop table album;
+ * drop table BOOK;
+ * drop table LOCKER;
+ * drop table MEMBER_PRODUCT;
+ * drop table MOVIE;
+ * drop table PRODUCT;
+ * drop table TEAM;
+ * drop table Member;
+ * drop table team;
+ * drop table posts;
+ */

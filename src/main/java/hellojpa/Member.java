@@ -3,38 +3,37 @@ package hellojpa;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter @Setter
 @Entity
-public class Member {
+public class Member extends BaseEntity{
+
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
     @Column(name = "username")
     private String username;
+//
+//    @OneToOne
+//    @JoinColumn(name = "locker_id", unique = true)
+//    private Locker locker;
 
-    @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
+    @ManyToMany
+    @JoinTable(name = "MEMBER_PRODUCT")
+    private List<Product> products = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "team_id")
     private Team team;
 
-    // 연간관계 편의메서드
-    public void changeTeam(Team team) {
-        this.team = team;
-        team.getMembers().add(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Member{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", team=" + team.toString() +
-                '}';
-    }
 
 
 }

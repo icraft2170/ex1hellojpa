@@ -16,18 +16,10 @@ public class Team {
     @Id @GeneratedValue
     @Column(name = "team_id")
     private Long id;
-
     private String name;
 
-    @OneToMany(mappedBy = "team")
+    @OneToMany
+    @JoinColumn(name = "team_id")
     List<Member> members = new ArrayList<Member>();
 
-    @Override
-    public String toString() {
-        return "Team{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", members=" + members +
-                '}';
-    }
 }
